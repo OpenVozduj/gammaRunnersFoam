@@ -1,0 +1,6 @@
+adjointInletPressurePower/adjointInletPressurePowerFvPatchScalarField.C
+adjointInletVelocityPower/adjointInletVelocityPowerFvPatchVectorField.C
+adjointOutletVelocityFixedFlux/adjointOutletVelocityFixedFluxFvPatchVectorField.C
+gammaRunnersFoam.C
+
+EXE = $(FOAM_USER_APPBIN)/gammaRunnersFoam
