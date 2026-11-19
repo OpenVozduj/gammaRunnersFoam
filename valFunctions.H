@@ -8,18 +8,12 @@
 // para obtener Watts.
 // ---------------------------------------------------------------------------
 
-Jout = 0.0;
-
-forAll(outletCells, i)
-{
-    const label pi = outletCells[i];
-
-    Jout += sum
-    (
-        phi.boundaryField()[pi]
-       *(p.boundaryField()[pi] + 0.5*magSqr(U.boundaryField()[pi]))
-    );                                       // <- sin .value()
-}
+Jout = sum
+(
+    phi.boundaryField()[outletPatchID]
+   *(p.boundaryField()[outletPatchID]
+     + 0.5*magSqr(U.boundaryField()[outletPatchID]))
+);
 
 Jpower = -Jout;
 

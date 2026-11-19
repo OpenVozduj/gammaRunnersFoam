@@ -93,18 +93,27 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.userTimeName() << nl << endl;
 
         turbulence->predict();
+        nuEff = turbulence->nuEff();          // <-- AÑADIR
+        nuEff.correctBoundaryConditions(); 
 
-        #include "UEqn.H"
+        opt++;
+        for (label k = 0; k < flowIter; ++k)   // 50-100
+        {
+            #include "UEqn.H"
+            
+        }
         #include "TEqn.H"
-        
-        #include "TaEqn.H"
+                
+        //#include "TaEqn.H"
         #include "UaEqn.H"
   
         #include "sens.H"
         #include "valFunctions.H"
+        
         #include "runSolverSDG.H"
         #include "lastUpdateEta.H"
         #include "penaltiesFunc.H"
+        #include "diagnostico.H"
 
         viscosity->correct();
         turbulence->correct();

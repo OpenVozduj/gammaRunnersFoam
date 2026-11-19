@@ -17,11 +17,7 @@
     surfaceScalarField phiHbyAa("phiHbyAa", fvc::flux(HbyAa));
 
     // En las salidas primales: [dJ]_p = -Un  =>  phia = -phi
-    forAll(outletCells, i)
-    {
-        const label pi = outletCells[i];
-        phiHbyAa.boundaryFieldRef()[pi] == -phi.boundaryField()[pi];
-    }
+    phiHbyAa.boundaryFieldRef()[outletPatchID] == -phi.boundaryField()[outletPatchID];
 
     while (simple.correctNonOrthogonal())
     {

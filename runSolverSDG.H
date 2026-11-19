@@ -7,8 +7,8 @@ List<scalarField> allSens (Pstream::nProcs());
 List<scalarField> allSensV (Pstream::nProcs());
 
 allEta   [Pstream::myProcNo()] = eta.primitiveField();
-allSens [Pstream::myProcNo()] = npSens.primitiveField();
-allSensV [Pstream::myProcNo()] = npSensV.primitiveField();
+allSens [Pstream::myProcNo()] = fSens.primitiveField();
+allSensV [Pstream::myProcNo()] = fSensV.primitiveField();
 
 Pstream::gatherList(allEta);
 Pstream::gatherList(allSens);

@@ -2,7 +2,7 @@
 diffAlpha = -alphaMax * (1.0 + qAlpha) * qAlpha 
             / Foam::pow(eta + qAlpha, 2);
 
-sens = (U&Ua) * diffAlpha;
+sens = -(U&Ua) * diffAlpha;
 
 // Normalize sensitivities
 scalar normS = gMax(mag(sens.primitiveField()));
@@ -13,3 +13,5 @@ npSensV.primitiveFieldRef() = 1.0;
 npSensV.correctBoundaryConditions();
 
 #include "diffHTProj.H"
+
+#include "sensHFilter.H"

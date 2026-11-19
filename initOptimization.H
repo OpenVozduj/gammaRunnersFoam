@@ -1,6 +1,17 @@
 const labelList& inletCells = mesh.boundary()["inlet"].faceCells();
 const labelList& outletCells = mesh.boundary()["outlet"].faceCells();
 
+label inletPatchID  = -1;
+label outletPatchID = -1;
+
+forAll(mesh.boundary(), patchi)
+{
+    const word& pname = mesh.boundary()[patchi].name();
+
+    if (pname == "inlet")  inletPatchID  = patchi;
+    if (pname == "outlet") outletPatchID = patchi;
+}
+
 const scalar tarVF = readScalar(configOptimization.lookup("targetFluidVF"));
 
 volScalarField diffAlpha
@@ -30,7 +41,7 @@ volScalarField sens
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    (U & Ua) * diffAlpha
+    -(U & Ua) * diffAlpha
 );
 
 volScalarField npSens
@@ -46,6 +57,20 @@ volScalarField npSens
     sens
 );
 
+volScalarField fSens
+(
+    IOobject
+    (
+        "fSens",
+        runTime.name(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    npSens,
+    "zeroGradient"
+);
+
 volScalarField npSensV
 (
     IOobject
@@ -58,6 +83,20 @@ volScalarField npSensV
     ),
     mesh,
     dimensionedScalar(dimless, 1.0)
+);
+
+volScalarField fSensV
+(
+    IOobject
+    (
+        "fSensV",
+        runTime.name(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    npSensV,
+    "zeroGradient"
 );
 
 volScalarField etaFil
@@ -77,6 +116,10 @@ volScalarField etaFil
 int opt = 0;
 scalar beta = readScalar(configOptimization.lookup("beta"));
 scalar eta0 = tarVF;
+const label flowIter = readLabel(configOptimization.lookup("flowIter"));
+
+scalar radiusAbs = readScalar(configOptimization.lookup("radiusAbs"));
+dimensionedScalar R("R", dimLength, radiusAbs);
 
 scalar Jpower = 0.0;
 scalar Jout   = 0.0;

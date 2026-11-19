@@ -68,6 +68,7 @@ volVectorField Ua
     mesh
 );
 
+/*
 Info<< "Reading field Ta\n" << endl;
 volScalarField Ta
 (
@@ -81,6 +82,7 @@ volScalarField Ta
     ),
     mesh
 );
+*/
 
 Info<< "Reading/calculating face flux field phia\n" << endl;
 surfaceScalarField phia
@@ -161,7 +163,7 @@ dimensionedScalar alphaMax(viscosity->lookup("alphaMax"));
 dimensionedScalar DtFluid(viscosity->lookup("DtFluid"));
 dimensionedScalar DtSolid(viscosity->lookup("DtSolid"));
 
-const scalar qAlpha = readScalar(configOptimization.lookup("qAlphaStart"));
+const scalar qAlpha = readScalar(configOptimization.lookup("qAlpha"));
 const scalar qD = readScalar(configOptimization.lookup("qD"));
 
 volScalarField alpha

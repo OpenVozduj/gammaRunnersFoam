@@ -1,3 +1,16 @@
+// Helmholtz filter for eta
+{
+    fvScalarMatrix etaFilterEqn
+    (
+        fvm::laplacian(etaFil)
+      - fvm::Sp(1.0/sqr(R), etaFil)
+    ==
+      - eta / (R*R)
+    );
+    etaFilterEqn.solve(); 
+    etaFil.correctBoundaryConditions();      
+}
+
 scalar globalTotalVol = gSum(mesh.V());
 scalar targetVol = tarVF * globalTotalVol;
 scalar tol = 0.01 * targetVol; // Tolerancia del 1% sobre el volumen objetivo
@@ -80,6 +93,7 @@ forAll(eta_I, celli)
 
 setCells(eta, inletCells, scalar(1.0));
 setCells(eta, outletCells, scalar(1.0));
+eta.correctBoundaryConditions();
 
 scalar projVol = gSum(eta.primitiveField() * mesh.V());
 scalar projVF = projVol / totalVol;
